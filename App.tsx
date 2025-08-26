@@ -1,8 +1,8 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { SettingsPanel } from './components/SettingsPanel';
 import { VideoOutput } from './components/VideoOutput';
 import { Header } from './components/Header';
+import { BackgroundAnimation } from './components/BackgroundAnimation';
 import { generateVideo } from './services/geminiService';
 import type { AspectRatio, Resolution, ImageFile } from './types';
 import { LOADING_MESSAGES } from './constants';
@@ -13,11 +13,47 @@ export default function App(): React.ReactNode {
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>('16:9');
   const [enableSound, setEnableSound] = useState<boolean>(true);
   const [resolution, setResolution] = useState<Resolution>('1080p');
-  
+  const [apiKey, setApiKey] = useState<string>('');
+
+  // Load API key from localStorage on mount
+  useEffect(() => {
+    const savedApiKey = localStorage.getItem('veo-api-key');
+    if (savedApiKey) {
+      setApiKey(savedApiKey);
+    }
+  }, []);
+
+  // Save API key to localStorage when it changes
+  useEffect(() => {
+    if (apiKey.trim()) {
+      localStorage.setItem('veo-api-key', apiKey);
+    } else {
+      localStorage.removeItem('veo-api-key');
+    }
+  }, [apiKey]);
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [loadingMessage, setLoadingMessage] = useState<string>('');
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  // Load theme preference from localStorage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('veo-theme') as 'dark' | 'light';
+    if (savedTheme) {
+      setTheme(savedTheme);
+    }
+  }, []);
+
+  // Save theme preference to localStorage
+  useEffect(() => {
+    localStorage.setItem('veo-theme', theme);
+  }, [theme]);
 
   useEffect(() => {
     if (isLoading) {
@@ -34,9 +70,18 @@ export default function App(): React.ReactNode {
     }
   }, [isLoading]);
 
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
+
   const handleGenerateVideo = useCallback(async () => {
     if (!prompt.trim()) {
       setError('Prompt cannot be empty.');
+      return;
+    }
+
+    if (!apiKey.trim()) {
+      setError('API Key is required. Please enter your Google AI API key.');
       return;
     }
 
@@ -51,6 +96,7 @@ export default function App(): React.ReactNode {
         aspectRatio,
         enableSound, // Note: enableSound and resolution are for UI demonstration
         resolution,  // as the documented API does not support them yet.
+        apiKey,
         onProgress: setLoadingMessage,
       });
       setVideoUrl(generatedUrl);
@@ -60,37 +106,75 @@ export default function App(): React.ReactNode {
     } finally {
       setIsLoading(false);
     }
-  }, [prompt, image, aspectRatio, enableSound, resolution]);
+  }, [prompt, image, aspectRatio, enableSound, resolution, apiKey]);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col font-sans">
-      <Header />
-      <main className="flex-grow container mx-auto p-4 md:p-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="flex flex-col space-y-6">
-          <SettingsPanel
-            prompt={prompt}
-            setPrompt={setPrompt}
-            image={image}
-            setImage={setImage}
-            aspectRatio={aspectRatio}
-            setAspectRatio={setAspectRatio}
-            enableSound={enableSound}
-            setEnableSound={setEnableSound}
-            resolution={resolution}
-            setResolution={setResolution}
-            isLoading={isLoading}
-            onGenerate={handleGenerateVideo}
-          />
-        </div>
-        <div className="flex flex-col">
-          <VideoOutput
-            videoUrl={videoUrl}
-            isLoading={isLoading}
-            loadingMessage={loadingMessage}
-            error={error}
-          />
-        </div>
-      </main>
+    <div className="min-h-screen relative overflow-hidden">
+      <BackgroundAnimation />
+
+      <div className="relative z-10 min-h-screen flex flex-col">
+        <Header theme={theme} onThemeToggle={toggleTheme} />
+
+        <main className="flex-grow container mx-auto p-4 md:p-8 max-w-7xl">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 lg:gap-12">
+            {/* Settings Panel */}
+            <div className="space-y-6">
+              <div className="glass rounded-3xl p-8 interactive-card">
+                <SettingsPanel
+                  prompt={prompt}
+                  setPrompt={setPrompt}
+                  image={image}
+                  setImage={setImage}
+                  aspectRatio={aspectRatio}
+                  setAspectRatio={setAspectRatio}
+                  enableSound={enableSound}
+                  setEnableSound={setEnableSound}
+                  resolution={resolution}
+                  setResolution={setResolution}
+                  apiKey={apiKey}
+                  setApiKey={setApiKey}
+                  isLoading={isLoading}
+                  onGenerate={handleGenerateVideo}
+                />
+              </div>
+            </div>
+
+            {/* Video Output */}
+            <div className="space-y-6">
+              <div className="glass rounded-3xl p-8 interactive-card min-h-[600px]">
+                <VideoOutput
+                  videoUrl={videoUrl}
+                  isLoading={isLoading}
+                  loadingMessage={loadingMessage}
+                  error={error}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Floating Stats Cards */}
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="glass rounded-2xl p-6 text-center animate-float" style={{animationDelay: '0s'}}>
+              <div className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                4K
+              </div>
+              <div className="text-sm opacity-80 mt-1">Ultra HD Quality</div>
+            </div>
+            <div className="glass rounded-2xl p-6 text-center animate-float" style={{animationDelay: '1s'}}>
+              <div className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                AI
+              </div>
+              <div className="text-sm opacity-80 mt-1">Powered Generation</div>
+            </div>
+            <div className="glass rounded-2xl p-6 text-center animate-float" style={{animationDelay: '2s'}}>
+              <div className="text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                ∞
+              </div>
+              <div className="text-sm opacity-80 mt-1">Unlimited Creativity</div>
+            </div>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

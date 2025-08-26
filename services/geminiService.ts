@@ -1,12 +1,5 @@
-
 import { GoogleGenAI } from "@google/genai";
 import type { VideoGenerationOptions } from '../types';
-
-if (!process.env.API_KEY) {
-    throw new Error("API_KEY environment variable not set");
-}
-
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 // A utility to extract base64 data from a data URL
 const getBase64Data = (dataUrl: string): string => {
@@ -18,7 +11,13 @@ const getBase64Data = (dataUrl: string): string => {
 };
 
 export const generateVideo = async (options: VideoGenerationOptions): Promise<string> => {
-    const { prompt, image, onProgress } = options;
+    const { prompt, image, apiKey, onProgress } = options;
+
+    if (!apiKey?.trim()) {
+        throw new Error("API Key is required. Please enter your Google AI API key.");
+    }
+
+    const ai = new GoogleGenAI({ apiKey });
 
     onProgress("Initializing video generation...");
 
@@ -61,7 +60,7 @@ export const generateVideo = async (options: VideoGenerationOptions): Promise<st
             }
             
             // The API Key needs to be appended to the download URI
-            const authenticatedUrl = `${downloadLink}&key=${process.env.API_KEY}`;
+            const authenticatedUrl = `${downloadLink}&key=${apiKey}`;
             const videoResponse = await fetch(authenticatedUrl);
 
             if (!videoResponse.ok) {
