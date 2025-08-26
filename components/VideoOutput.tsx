@@ -53,10 +53,10 @@ const Placeholder: React.FC = () => (
     </div>
 
     <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-      Ready to Create Magic?
+      AI Video Studio
     </h3>
     <p className="text-lg opacity-70 mb-6 max-w-md">
-      Your AI-generated video will appear here. Let your imagination run wild!
+      Enter your API key and describe your vision to generate stunning AI videos
     </p>
 
     {/* Feature highlights */}
