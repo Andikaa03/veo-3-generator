@@ -1,4 +1,3 @@
-
 export type AspectRatio = '16:9' | '9:16';
 export type Resolution = '720p' | '1080p';
 
@@ -13,5 +12,6 @@ export interface VideoGenerationOptions {
   aspectRatio: AspectRatio;
   enableSound: boolean;
   resolution: Resolution;
+  apiKey: string;
   onProgress: (message: string) => void;
 }
