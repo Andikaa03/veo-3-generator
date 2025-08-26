@@ -56,8 +56,9 @@ export const ApiKeyInput: React.FC<ApiKeyInputProps> = ({ apiKey, setApiKey, dis
             onClick={() => setShowKey(!showKey)}
             className="absolute right-0 top-1/2 -translate-y-1/2 p-2 rounded-lg hover:bg-white/10 transition-colors"
             disabled={disabled}
+            title={showKey ? 'Hide API key' : 'Show API key'}
           >
-            <Icon name={showKey ? 'close' : 'sparkles'} size={5} />
+            <Icon name={showKey ? 'eye-off' : 'eye'} size={5} />
           </button>
         </div>
         
