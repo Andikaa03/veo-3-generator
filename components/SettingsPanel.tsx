@@ -3,6 +3,7 @@ import type { AspectRatio, Resolution, ImageFile } from '../types';
 import { ImageUploader } from './ImageUploader';
 import { OptionSelector } from './OptionSelector';
 import { PromptInput } from './PromptInput';
+import { ApiKeyInput } from './ApiKeyInput';
 import { Icon } from './Icon';
 
 interface SettingsPanelProps {
@@ -49,31 +50,11 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       </div>
 
       {/* API Key Section */}
-      <div className="space-y-4">
-        <div className="flex items-center space-x-2 mb-3">
-          <span className="text-2xl">🔑</span>
-          <h3 className="text-lg font-semibold">Google AI API Key</h3>
-          <span className="text-xs opacity-60 bg-red-500/20 px-2 py-1 rounded-full">Required</span>
-        </div>
-        <div className="glass rounded-2xl p-6">
-          <input
-            type="password"
-            value={apiKey}
-            onChange={(e) => setApiKey(e.target.value)}
-            disabled={isLoading}
-            placeholder="Enter your Google AI API key..."
-            className="w-full bg-transparent outline-none text-lg placeholder-opacity-60 disabled:opacity-50"
-          />
-          <div className="mt-3 pt-3 border-t border-white/10">
-            <p className="text-xs opacity-60">
-              🔒 Your API key is stored locally and never sent to our servers.
-              <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 ml-1">
-                Get your free API key →
-              </a>
-            </p>
-          </div>
-        </div>
-      </div>
+      <ApiKeyInput
+        apiKey={apiKey}
+        setApiKey={setApiKey}
+        disabled={isLoading}
+      />
 
       {/* Prompt Section */}
       <div className="space-y-4">
