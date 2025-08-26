@@ -59,22 +59,6 @@ const Placeholder: React.FC = () => (
       <p className="text-base opacity-70 leading-relaxed">
         Enter your API key and describe your vision to generate stunning AI videos
       </p>
-
-      {/* Feature highlights */}
-      <div className="grid grid-cols-1 gap-3 mt-6 w-full">
-        <div className="flex items-center justify-center space-x-2 text-sm opacity-60">
-          <span>🎥</span>
-          <span>High-quality video generation</span>
-        </div>
-        <div className="flex items-center justify-center space-x-2 text-sm opacity-60">
-          <span>⚡</span>
-          <span>Lightning-fast AI processing</span>
-        </div>
-        <div className="flex items-center justify-center space-x-2 text-sm opacity-60">
-          <span>🎨</span>
-          <span>Unlimited creative possibilities</span>
-        </div>
-      </div>
     </div>
   </div>
 );
