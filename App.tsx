@@ -14,6 +14,23 @@ export default function App(): React.ReactNode {
   const [enableSound, setEnableSound] = useState<boolean>(true);
   const [resolution, setResolution] = useState<Resolution>('1080p');
   const [apiKey, setApiKey] = useState<string>('');
+
+  // Load API key from localStorage on mount
+  useEffect(() => {
+    const savedApiKey = localStorage.getItem('veo-api-key');
+    if (savedApiKey) {
+      setApiKey(savedApiKey);
+    }
+  }, []);
+
+  // Save API key to localStorage when it changes
+  useEffect(() => {
+    if (apiKey.trim()) {
+      localStorage.setItem('veo-api-key', apiKey);
+    } else {
+      localStorage.removeItem('veo-api-key');
+    }
+  }, [apiKey]);
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -23,6 +40,19 @@ export default function App(): React.ReactNode {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  // Load theme preference from localStorage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('veo-theme') as 'dark' | 'light';
+    if (savedTheme) {
+      setTheme(savedTheme);
+    }
+  }, []);
+
+  // Save theme preference to localStorage
+  useEffect(() => {
+    localStorage.setItem('veo-theme', theme);
   }, [theme]);
 
   useEffect(() => {
