@@ -101,6 +101,8 @@ export default function App(): React.ReactNode {
                   setEnableSound={setEnableSound}
                   resolution={resolution}
                   setResolution={setResolution}
+                  apiKey={apiKey}
+                  setApiKey={setApiKey}
                   isLoading={isLoading}
                   onGenerate={handleGenerateVideo}
                 />
