@@ -13,6 +13,7 @@ export default function App(): React.ReactNode {
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>('16:9');
   const [enableSound, setEnableSound] = useState<boolean>(true);
   const [resolution, setResolution] = useState<Resolution>('1080p');
+  const [apiKey, setApiKey] = useState<string>('');
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -49,6 +50,11 @@ export default function App(): React.ReactNode {
       return;
     }
 
+    if (!apiKey.trim()) {
+      setError('API Key is required. Please enter your Google AI API key.');
+      return;
+    }
+
     setIsLoading(true);
     setVideoUrl(null);
     setError(null);
@@ -60,6 +66,7 @@ export default function App(): React.ReactNode {
         aspectRatio,
         enableSound, // Note: enableSound and resolution are for UI demonstration
         resolution,  // as the documented API does not support them yet.
+        apiKey,
         onProgress: setLoadingMessage,
       });
       setVideoUrl(generatedUrl);
@@ -69,7 +76,7 @@ export default function App(): React.ReactNode {
     } finally {
       setIsLoading(false);
     }
-  }, [prompt, image, aspectRatio, enableSound, resolution]);
+  }, [prompt, image, aspectRatio, enableSound, resolution, apiKey]);
 
   return (
     <div className="min-h-screen relative overflow-hidden">
