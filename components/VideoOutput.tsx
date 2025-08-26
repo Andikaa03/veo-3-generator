@@ -41,37 +41,39 @@ const Loader: React.FC<{ message: string }> = ({ message }) => (
 );
 
 const Placeholder: React.FC = () => (
-  <div className="flex flex-col items-center justify-center h-full text-center p-8">
+  <div className="flex flex-col items-center justify-center h-full text-center p-6 overflow-visible">
     {/* Animated video icon */}
-    <div className="relative mb-8">
-      <div className="w-32 h-32 rounded-3xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center animate-float">
-        <Icon name="video" size={16} className="text-purple-400" />
+    <div className="relative mb-6">
+      <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center animate-float">
+        <Icon name="video" size={12} className="text-purple-400" />
       </div>
-      <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full flex items-center justify-center animate-bounce">
-        <span className="text-white text-lg">✨</span>
+      <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full flex items-center justify-center animate-bounce">
+        <span className="text-white text-sm">✨</span>
       </div>
     </div>
 
-    <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-      AI Video Studio
-    </h3>
-    <p className="text-lg opacity-70 mb-6 max-w-md">
-      Enter your API key and describe your vision to generate stunning AI videos
-    </p>
+    <div className="space-y-4 w-full max-w-lg px-4">
+      <h3 className="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+        AI Video Studio
+      </h3>
+      <p className="text-base opacity-70 leading-relaxed">
+        Enter your API key and describe your vision to generate stunning AI videos
+      </p>
 
-    {/* Feature highlights */}
-    <div className="grid grid-cols-1 gap-4 max-w-sm">
-      <div className="flex items-center space-x-3 text-sm opacity-60">
-        <span className="text-lg">🎥</span>
-        <span>High-quality video generation</span>
-      </div>
-      <div className="flex items-center space-x-3 text-sm opacity-60">
-        <span className="text-lg">⚡</span>
-        <span>Lightning-fast AI processing</span>
-      </div>
-      <div className="flex items-center space-x-3 text-sm opacity-60">
-        <span className="text-lg">🎨</span>
-        <span>Unlimited creative possibilities</span>
+      {/* Feature highlights */}
+      <div className="grid grid-cols-1 gap-3 mt-6 w-full">
+        <div className="flex items-center justify-center space-x-2 text-sm opacity-60">
+          <span>🎥</span>
+          <span>High-quality video generation</span>
+        </div>
+        <div className="flex items-center justify-center space-x-2 text-sm opacity-60">
+          <span>⚡</span>
+          <span>Lightning-fast AI processing</span>
+        </div>
+        <div className="flex items-center justify-center space-x-2 text-sm opacity-60">
+          <span>🎨</span>
+          <span>Unlimited creative possibilities</span>
+        </div>
       </div>
     </div>
   </div>
