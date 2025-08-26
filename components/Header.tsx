@@ -50,12 +50,6 @@ export const Header: React.FC<HeaderProps> = ({ theme, onThemeToggle }) => {
                   />
                 </div>
               </button>
-
-              {/* Status Indicator */}
-              <div className="flex items-center space-x-2 px-4 py-2 rounded-xl glass">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span className="text-sm font-medium">Online</span>
-              </div>
             </div>
           </div>
         </div>
