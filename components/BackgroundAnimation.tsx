@@ -61,7 +61,8 @@ export const BackgroundAnimation: React.FC = () => {
         particle.opacity = 0.3 + Math.sin(Date.now() * 0.001 + index) * 0.2;
         
         // Draw particle
-        ctx.save();\n        ctx.globalAlpha = particle.opacity;
+        ctx.save();
+        ctx.globalAlpha = particle.opacity;
         ctx.fillStyle = particle.color;
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
