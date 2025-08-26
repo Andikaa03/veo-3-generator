@@ -16,6 +16,8 @@ interface SettingsPanelProps {
   setEnableSound: (enabled: boolean) => void;
   resolution: Resolution;
   setResolution: (res: Resolution) => void;
+  apiKey: string;
+  setApiKey: (key: string) => void;
   isLoading: boolean;
   onGenerate: () => void;
 }
@@ -31,6 +33,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   setEnableSound,
   resolution,
   setResolution,
+  apiKey,
+  setApiKey,
   isLoading,
   onGenerate,
 }) => {
@@ -42,6 +46,33 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
           Create Your Video
         </h2>
         <p className="opacity-70">Bring your imagination to life with AI</p>
+      </div>
+
+      {/* API Key Section */}
+      <div className="space-y-4">
+        <div className="flex items-center space-x-2 mb-3">
+          <span className="text-2xl">🔑</span>
+          <h3 className="text-lg font-semibold">Google AI API Key</h3>
+          <span className="text-xs opacity-60 bg-red-500/20 px-2 py-1 rounded-full">Required</span>
+        </div>
+        <div className="glass rounded-2xl p-6">
+          <input
+            type="password"
+            value={apiKey}
+            onChange={(e) => setApiKey(e.target.value)}
+            disabled={isLoading}
+            placeholder="Enter your Google AI API key..."
+            className="w-full bg-transparent outline-none text-lg placeholder-opacity-60 disabled:opacity-50"
+          />
+          <div className="mt-3 pt-3 border-t border-white/10">
+            <p className="text-xs opacity-60">
+              🔒 Your API key is stored locally and never sent to our servers.
+              <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 ml-1">
+                Get your free API key →
+              </a>
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Prompt Section */}
@@ -123,7 +154,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       <div className="pt-6">
         <button
           onClick={onGenerate}
-          disabled={isLoading || !prompt.trim()}
+          disabled={isLoading || !prompt.trim() || !apiKey.trim()}
           className="w-full relative overflow-hidden bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 px-6 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105 shadow-2xl btn-hover focus-ring group"
         >
           <div className="flex items-center justify-center relative z-10">
@@ -144,10 +175,15 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transform -skew-x-12 group-hover:translate-x-full transition-all duration-700" />
         </button>
 
-        {!prompt.trim() && (
-          <p className="text-center text-sm opacity-60 mt-3">
-            💡 Enter a creative prompt to start generating
-          </p>
+        {(!prompt.trim() || !apiKey.trim()) && (
+          <div className="text-center text-sm opacity-60 mt-3 space-y-1">
+            {!apiKey.trim() && (
+              <p>🔑 API key required to generate videos</p>
+            )}
+            {!prompt.trim() && (
+              <p>💡 Enter a creative prompt to start generating</p>
+            )}
+          </div>
         )}
       </div>
     </div>
